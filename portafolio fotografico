@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio de Fotografía</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+        body {
+            background-color: #f8e8ff;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        #loader {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #800080;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        #loader div {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 2s linear infinite;
+            /* Aumenta la duración del efecto a 2s */
+        }
+        
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        header {
+            background-color: #800080;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        header .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 50px;
+            height: 50px;
+        }
+        
+        header h1 {
+            font-family: 'Pacifico', cursive;
+            margin: 0;
+            font-size: 2.5em;
+        }
+        
+        header nav {
+            margin: 15px 0;
+        }
+        
+        header nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            background-color: #9400D3;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        
+        header nav a:hover {
+            background-color: #DDA0DD;
+            transform: scale(1.1);
+        }
+        
+        #loginButton {
+            background-color: #9400D3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        
+        #loginButton:hover {
+            background-color: #DDA0DD;
+            transform: scale(1.1);
+        }
+        
+        .subheader {
+            font-size: 1.2em;
+            margin: 10px 0;
+            color: black;
+        }
+        
+        .content {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .content h2 {
+            font-size: 2em;
+            color: #e08ee0;
+        }
+        
+        .content p {
+            font-size: 1.1em;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .gallery div {
+            position: relative;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1.5s forwards;
+            /* Aumenta la duración del efecto a 1.5s */
+        }
+        
+        .gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .gallery img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .gallery .caption {
+            background: #800080;
+            color: white;
+            padding: 5px 0;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .theme {
+            grid-column: span 5;
+            text-align: center;
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: #800080;
+            animation: bounceIn 1.5s forwards;
+            /* Aumenta la duración del efecto a 1.5s */
+        }
+        
+        footer {
+            background-color: #800080;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        
+        .contact {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 0.9em;
+            color: black;
+        }
+        
+        .contact img {
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        
+        #loginForm {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        #loginForm input {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 200px;
+        }
+        
+        #contactForm {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        #contactForm input,
+        #contactForm textarea {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+        
+        #contactForm textarea {
+            height: 100px;
+        }
+        
+        #contactForm button {
+            background-color: #9400D3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        
+        #contactForm button:hover {
+            background-color: #DDA0DD;
+            transform: scale(1.1);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        
+        .modal-content {
+            margin: 15% auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+        
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes bounceIn {
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+        /* Media Queries for Responsive Design */
+        
+        @media (max-width: 1200px) {
+            .gallery {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            header .logo {
+                top: 5px;
+                left: 5px;
+                width: 40px;
+                height: 40px;
+            }
+            header h1 {
+                font-size: 2em;
+            }
+            #loginButton {
+                top: 5px;
+                right: 5px;
+                padding: 8px 15px;
+            }
+            .subheader {
+                font-size: 1em;
+            }
+            .content h2 {
+                font-size: 1.5em;
+            }
+            .content p {
+                font-size: 1em;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .gallery {
+                grid-template-columns: repeat(1, 1fr);
+            }
+            header h1 {
+                font-size: 1.5em;
+            }
+            header nav a {
+                margin: 0 5px;
+                padding: 5px 10px;
+                font-size: 0.9em;
+            }
+            #loginButton {
+                padding: 8px 12px;
+                font-size: 0.9em;
+            }
+            .subheader {
+                font-size: 0.9em;
+            }
+            .content h2 {
+                font-size: 1.3em;
+            }
+            .content p {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+
+<body onload="hideLoader()">
+    <div id="loader">
+        <div></div>
+    </div>
+    <header>
+        <img src="logo final.png" alt="Logo" class="logo">
+        <h1>Portafolio de Fotografía</h1>
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#galeria">Galería</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
+        <button id="loginButton">Iniciar Sesión</button>
+    </header>
+    <div id="loginForm">
+        <input type="text" id="username" placeholder="Usuario">
+        <input type="password" id="password" placeholder="Contraseña">
+        <button onclick="login()">Ingresar</button>
+    </div>
+    <div class="subheader">Portafolio de Víctor Alexander Serrano.E</div>
+    <div class="content" id="inicio">
+        <h2>Inicio</h2>
+        <p>Un portafolio de fotografía es una colección de imágenes que muestran el trabajo y la creatividad de un fotógrafo. Es una herramienta esencial para presentar su estilo y habilidades a potenciales clientes o empleadores. En este portafolio, encontrarás
+            una variedad de temas y estilos que reflejan mi pasión por la fotografía.</p>
+    </div>
+    <div class="theme" id="galeria">Galería</div>
+    <div class="gallery">
+        <div>
+            <img src="img1.jpg" alt="Imagen 1" onclick="openModal('img1.jpg')">
+            <div class="caption">Maqueta</div>
+        </div>
+        <div>
+            <img src="img3.png" alt="Imagen 2" onclick="openModal('img3.png')">
+            <div class="caption">Arco</div>
+        </div>
+        <div>
+            <img src="image3.jpg" alt="Imagen 3" onclick="openModal('image3.jpg')">
+            <div class="caption">Censurado</div>
+        </div>
+        <div>
+            <img src="image4.jpg" alt="Imagen 4" onclick="openModal('image4.jpg')">
+            <div class="caption">Observatorio</div>
+        </div>
+        <div>
+            <img src="image5.jpg" alt="Imagen 5" onclick="openModal('image5.jpg')">
+            <div class="caption">Arbol</div>
+        </div>
+        <div class="theme">Fotos de Puebla</div>
+        <div>
+            <img src="img4.jpg" alt="Imagen 6" onclick="openModal('img4.jpg')">
+            <div class="caption">Bolegon</div>
+        </div>
+        <div>
+            <img src="image7.jpg" alt="Imagen 7" onclick="openModal('image7.jpg')">
+            <div class="caption">Producto</div>
+        </div>
+        <div>
+            <img src="image8.jpg" alt="Imagen 8" onclick="openModal('image8.jpg')">
+            <div class="caption">Repeticion</div>
+        </div>
+        <div>
+            <img src="image9.jpg" alt="Imagen 9" onclick="openModal('image9.jpg')">
+            <div class="caption">Moto</div>
+        </div>
+        <div>
+            <img src="image10.jpg" alt="Imagen 10" onclick="openModal('image10.jpg')">
+            <div class="caption">Carro</div>
+        </div>
+        <div class="theme">Fotos de trabajos</div>
+        <div>
+            <img src="image11.jpg" alt="Imagen 11" onclick="openModal('image11.jpg')">
+            <div class="caption">Abeja</div>
+        </div>
+        <div>
+            <img src="image12.jpg" alt="Imagen 12" onclick="openModal('image12.jpg')">
+            <div class="caption">Arbol</div>
+        </div>
+        <div>
+            <img src="image13.jpg" alt="Imagen 13" onclick="openModal('image13.jpg')">
+            <div class="caption">Mariposa</div>
+        </div>
+        <div>
+            <img src="image14.jpg" alt="Imagen 14" onclick="openModal('image14.jpg')">
+            <div class="caption">Cempasúchil</div>
+        </div>
+        <div>
+            <img src="image15.jpg" alt="Imagen 15" onclick="openModal('image15.jpg')">
+            <div class="caption">Flor Muerta</div>
+        </div>
+        <div class="theme">Fotos de plantas</div>
+        <div>
+            <img src="image16.jpg" alt="Imagen 16" onclick="openModal('image16.jpg')">
+            <div class="caption">Joseline</div>
+        </div>
+        <div>
+            <img src="img2.jpg" alt="Imagen 17" onclick="openModal('img2.jpg')">
+            <div class="caption">Joseline</div>
+        </div>
+        <div>
+            <img src="image18.jpg" alt="Imagen 18" onclick="openModal('image18.jpg')">
+            <div class="caption">Señora de Uñas</div>
+        </div>
+        <div>
+            <img src="image19.jpg" alt="Imagen 19" onclick="openModal('image19.jpg')">
+            <div class="caption">Vendedor de Nieves</div>
+        </div>
+        <div>
+            <img src="image20.jpg" alt="Imagen 20" onclick="openModal('image20.jpg')">
+            <div class="caption">Bonice</div>
+        </div>
+        <div class="theme">Fotos de persona</div>
+    </div>
+    <div class="content" id="contacto">
+        <h2>Contacto</h2>
+        <p>Por cualquier inconveniente escríbenos en el siguiente correo: vicalex20042@gmail.com</p>
+        <p>
+            <a href="https://www.facebook.com/share/1CgCJwSHuX/" target="_blank" class="facebook-link">
+                <img src="logo F.png" alt="Facebook Logo" width="50" class="facebook-logo"> Alex Serrano
+            </a>
+            <img src="logo W.png" alt="WhatsApp" width="50"> 5568797893
+        </p>
+        <form id="contactForm" action="mailto:vicalex20042@gmail.com" method="post" enctype="text/plain">
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="email">Correo electrónico:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="message">Mensaje:</label>
+            <textarea id="message" name="message" required></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+    <footer>
+        <p>Portafolio de Fotografía</p>
+        <button onclick="cambiarColor()">Cambiar Color de Fondo</button>
+    </footer>
+
+    <div id="modal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        function hideLoader() {
+            setTimeout(function() {
+                document.getElementById('loader').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 2000); // Aumenta la duración del efecto de carga a 2000ms (2 segundos)
+        }
+
+        document.getElementById('loginButton').onclick = function() {
+            var form = document.getElementById('loginForm');
+            form.style.display = form.style.display === 'block' ? 'none' : 'block';
+        };
+
+        function login() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            alert('Usuario: ' + username + '\nContraseña: ' + password);
+        }
+
+        function openModal(src) {
+            var modal = document.getElementById('modal');
+            var modalImage = document.getElementById('modalImage');
+            modal.style.display = 'block';
+            modalImage.src = src;
+        }
+
+        function closeModal() {
+            var modal = document.getElementById('modal');
+            modal.style.display = 'none';
+        }
+
+        function cambiarColor() {
+            var body = document.body;
+            var isLightMode = body.style.backgroundColor === '' || body.style.backgroundColor === 'rgb(248, 232, 255)';
+
+            if (isLightMode) {
+                // Cambiar a modo oscuro
+                body.style.backgroundColor = '#2f2f2f';
+                body.style.color = '#f1f1f1';
+                document.querySelectorAll('header, nav, footer, .caption, .btn, #loginButton').forEach((el) => {
+                    el.style.backgroundColor = '#4f4f4f';
+                    el.style.color = '#f1f1f1';
+                });
+            } else {
+                // Cambiar a modo claro
+                body.style.backgroundColor = '#f8e8ff';
+                body.style.color = '#333';
+                document.querySelectorAll('header, nav, footer, .caption, .btn, #loginButton').forEach((el) => {
+                    el.style.backgroundColor = '';
+                    el.style.color = '';
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>
